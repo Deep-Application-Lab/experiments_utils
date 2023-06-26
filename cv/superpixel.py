@@ -36,17 +36,20 @@ def generateLSC_onbatch(srcDir:str,distDir:str,color:int=1,resize_shape=None,ite
     img_files = os.listdir(srcDir)
     img_paths = [os.path.join(srcDir, f) for f in img_files]
     for i, img in enumerate(img_paths):
-        maskPath = os.path.join(distDir, "mask", img_files[i])
-        on_imgPath = os.path.join(distDir, "superpixel_img", img_files[i])
-        img = cv2.imread(img_paths[i], flags=color)
-        if resize_shape is not None:
-            img = cv2.resize(img, resize_shape)
-        lsh = LSC(img,iterate=iterate,mask=mask,on_img=on_img)
-        if mask:
-            cv2.imwrite(maskPath, lsh['mask'])
-        if on_img:
-            cv2.imwrite(on_imgPath, lsh['on_img'])
-
+        try:
+            maskPath = os.path.join(distDir, "mask", img_files[i])
+            on_imgPath = os.path.join(distDir, "superpixel_img", img_files[i])
+            img = cv2.imread(img_paths[i], flags=color)
+            if resize_shape is not None:
+                img = cv2.resize(img, resize_shape)
+            lsh = LSC(img,iterate=iterate,mask=mask,on_img=on_img)
+            if mask:
+                cv2.imwrite(maskPath, lsh['mask'])
+            if on_img:
+                cv2.imwrite(on_imgPath, lsh['on_img'])
+        except Exception:
+            print("pass {}".format(img_paths[i]))
+            continue
 def splitSuperpixel(dirPath:str,color:int=1,resize_shape=None,iterate:int=10,mask:bool=False,on_img:bool=True):
     files = os.listdir(dirPath)
     img_path = os.path.join(dirPath, 'img')
@@ -63,5 +66,5 @@ def splitSuperpixel(dirPath:str,color:int=1,resize_shape=None,iterate:int=10,mas
     if on_img:
         on_img_path = os.path.join(dirPath, 'superpixel_img')
         create_directory(on_img_path)
-        clear_directory(mask_path)
+        clear_directory(on_img_path)
     generateLSC_onbatch(img_path,dirPath,color,resize_shape,iterate,mask,on_img)
