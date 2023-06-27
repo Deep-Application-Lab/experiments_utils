@@ -1,14 +1,6 @@
 import argparse
 import os
 import shutil
-from typing import List
-
-"""
-1. 普通导入: import_once('numpy') 
-2. 别名导入: import_once('numpy', 'np')
-3. 多级导入: import_once('numpy.random.randint')
-4. from ... import ...:import_once('numpy', names=['sin', 'cos'])
-"""
 
 
 
